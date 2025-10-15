@@ -7,8 +7,11 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+url="https://pantropical-honey-ungainsaid.ngrok-free.dev"
+# llm= Ollama(model="llama3.2", base_url=url)
 ## Langsmith Tracking
-os.environ["LANGCHAIN_API_KEY"]=os.getenv("LANGCHAIN_API_KEY")
+# os.environ["LANGCHAIN_API_KEY"]=os.getenv("LANGCHAIN_API_KEY")
+# os.environ["OPENROUTER_API_KEY"]=os.getenv("OPENROUTER_API_KEY")
 os.environ["LANGCHAIN_TRACING_V2"]="true"
 os.environ["LANGCHAIN_PROJECT"]="Simple Q&A Chatbot With Ollama"
 
@@ -21,7 +24,7 @@ prompt=ChatPromptTemplate.from_messages(
 )
 
 def generate_response(question,llm,temperature,max_tokens):
-    llm=Ollama(model=llm)
+    llm=Ollama(model=llm,base_url=url)
     output_parser=StrOutputParser()
     chain=prompt|llm|output_parser
     answer=chain.invoke({'question':question})
@@ -32,7 +35,7 @@ st.title("Simple Q&A Chatbot With Ollama")
  
 
 ## Select the Ollama model
-llm=st.sidebar.selectbox("Select Open Source model",["mistral"])
+llm=st.sidebar.selectbox("Select Open Source model",["llama3.2"])
 
 ## Adjust response parameter
 temperature=st.sidebar.slider("Temperature",min_value=0.0,max_value=1.0,value=0.65)
